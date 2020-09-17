@@ -120,7 +120,10 @@ class QueryBuilderParser
                     $function = 'createNestedQuery';
                 }
 
-                $querybuilder = $this->{$function}($query, $loopRule, $rule->condition);
+                // convert Query Builder object to Eloquent Builder
+                $eloquentQuery = new Builder($query);
+
+                $querybuilder = $this->{$function}($eloquentQuery, $loopRule, $rule->condition);
             }
 
         }, $condition);
