@@ -17,19 +17,30 @@ A simple to use query builder for the [jQuery QueryBuilder plugin](http://queryb
 ## Building a new query from QueryBuilder rules.
 
 ```php
+    use App\Models\Product;
     use timgws\QueryBuilderParser;
+    use Illuminate\Http\Resources\Json\JsonResource;
 
-    $table = DB::table('table_of_data_to_integrate');
-    $qbp = new QueryBuilderParser(
+    $filterRules = $request->get('rules');
+  
+    $query = (new Product())->newQuery();
+    
+    $queryParser = new QueryBuilderParser(
         // provide here a list of allowable rows from the query builder.
-        // NOTE: if a row is listed here, you will be able to create limits on that row from QBP.
-        array( 'name', 'email' )
+        // NOTE: if a row is listed here, you will be able to create limits on that row from QueryBuilderParser.
+        ['name', 'description', 'price']
     );
 
-    $query = $qbp->parse($input['querybuilder'], $table);
+    $query = $query->where(function ($query) use ($queryParser, $filterRules) {
+        $queryParser->parse($filterRules, $query);
+    });
+    
+    ...
+    ...
 
-    $rows = $query->get();
-    return Response::JSON($rows);
+    $products = $query->get();
+
+    return new JsonResource($products);
 ```
 
 ![jQuery QueryBuilder](/querybuilder.png?raw=true "jQuery QueryBuilder")
@@ -37,7 +48,7 @@ A simple to use query builder for the [jQuery QueryBuilder plugin](http://queryb
 This query when posted will create the following SQL query:
 
 ```sql
-SELECT * FROM table_of_data_to_integrate WHERE `name` LIKE '%tim%' AND `email` LIKE '%@gmail.com'
+SELECT * FROM products WHERE `name` LIKE '%tim%' AND `description` LIKE '%my description'
 ```
 
 ## Getting results from MongoDB
@@ -98,7 +109,7 @@ for filtering data, and seeing the results on the fly.
             $query = new QueryBuilderParser($show_columns);
             
             /** Illuminate/Database/Query/Builder $queryBuilder **/
-            $queryBuilder = $query->parse(DB::table('users'));
+            $queryBuilder = $query->parse();
             
             return Datatable::query($queryBuilder)
                 ->showColumns($show_columns)
