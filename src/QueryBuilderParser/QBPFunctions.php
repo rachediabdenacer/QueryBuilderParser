@@ -1,7 +1,7 @@
 <?php
 namespace timgws;
 
-use \Illuminate\Database\Query\Builder;
+use \Illuminate\Database\Eloquent\Builder;
 use \stdClass;
 use \Carbon\Carbon;
 

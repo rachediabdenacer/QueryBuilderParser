@@ -4,7 +4,7 @@ namespace timgws;
 
 use \Carbon\Carbon;
 use \stdClass;
-use \Illuminate\Database\Query\Builder;
+use \Illuminate\Database\Eloquent\Builder;
 use \timgws\QBParseException;
 
 class QueryBuilderParser
