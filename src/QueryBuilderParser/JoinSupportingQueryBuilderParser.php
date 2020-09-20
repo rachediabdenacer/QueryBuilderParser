@@ -1,10 +1,10 @@
 <?php
 
-namespace timgws;
+namespace rachediabdenacer;
 
 use Illuminate\Database\Eloquent\Builder;
 use stdClass;
-use timgws\QBParseException;
+use rachediabdenacer\QBParseException;
 
 class JoinSupportingQueryBuilderParser extends QueryBuilderParser
 {

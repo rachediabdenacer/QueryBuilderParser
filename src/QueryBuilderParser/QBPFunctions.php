@@ -1,5 +1,5 @@
 <?php
-namespace timgws;
+namespace rachediabdenacer;
 
 use \Illuminate\Database\Eloquent\Builder;
 use \stdClass;

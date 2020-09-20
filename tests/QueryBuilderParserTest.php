@@ -1,6 +1,6 @@
 <?php
 
-namespace timgws\test;
+namespace rachediabdenacer\test;
 
 use Illuminate\Database\Query\Builder;
 
@@ -68,7 +68,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testCategoryInvalidArray()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("should not be an array, but it is");
 
         $builder = $this->createQueryBuilder();
@@ -161,7 +161,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testJSONParseException()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("JSON parsing threw an error");
 
         $builder = $this->createQueryBuilder();
@@ -329,7 +329,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testInputIsNotArray()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("should not be an array, but it is");
 
         $v = '1.23';
@@ -359,7 +359,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testFieldNotInittedNotAllowed()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("does not exist in fields list");
 
         $builder = $this->createQueryBuilder();
@@ -369,7 +369,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testBetweenMustBeArray()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("should be an array, but it isn't");
 
         $json = $this->_buildJsonTestForBetween(true);
@@ -381,7 +381,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testThrowExceptionInvalidJSON()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("JSON parsing threw an error");
 
         $json = $this->_buildJsonTestForBetween(false /*invalid json */);
@@ -417,7 +417,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
      */
     public function testBetweenOperatorThrowsException()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("should be an array with only two items.");
 
         $builder = $this->createQueryBuilder();
@@ -431,7 +431,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
      */
     public function testNotBetweenOperatorThrowsException()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("should be an array with only two items.");
 
         $builder = $this->createQueryBuilder();
@@ -448,7 +448,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
      */
     public function testArrayDoesNotParse()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("The query is not valid JSON");
 
         $builder = $this->createQueryBuilder();
@@ -479,7 +479,7 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
 
     public function testQueryContains()
     {
-        $some_json_input = '{"condition":"AND","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"Johnny"},{"condition":"AND","rules":[{"id":"category","field":"category","type":"integer","input":"select","operator":"equal","value":"2"},{"id":"in_stock","field":"in_stock","type":"integer","input":"radio","operator":"equal","value":"1"},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"tim"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"timgws"}]},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"ends_with","value":"builder"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"qbp"},{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"query"}]}]}]}';
+        $some_json_input = '{"condition":"AND","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"Johnny"},{"condition":"AND","rules":[{"id":"category","field":"category","type":"integer","input":"select","operator":"equal","value":"2"},{"id":"in_stock","field":"in_stock","type":"integer","input":"radio","operator":"equal","value":"1"},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"tim"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"rachediabdenacer"}]},{"condition":"OR","rules":[{"id":"name","field":"name","type":"string","input":"text","operator":"ends_with","value":"builder"},{"id":"name","field":"name","type":"string","input":"text","operator":"contains","value":"qbp"},{"id":"name","field":"name","type":"string","input":"text","operator":"begins_with","value":"query"}]}]}]}';
 
         $builder = $this->createQueryBuilder();
         $qb = $this->getParserUnderTest();
@@ -549,11 +549,11 @@ class QueryBuilderParserTest extends CommonQueryBuilderTests
     }
 
     /**
-     * @throws \timgws\QBParseException
+     * @throws \rachediabdenacer\QBParseException
      */
     public function testIncorrectCondition()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("Condition can only be one of: 'and', 'or'");
 
         $json = '{"condition":null,"rules":[

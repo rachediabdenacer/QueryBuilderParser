@@ -1,6 +1,6 @@
 <?php
 
-namespace timgws;
+namespace rachediabdenacer;
 
 class QBRuleException extends \Exception
 {

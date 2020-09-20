@@ -1,20 +1,20 @@
 <?php
-namespace timgws\test;
+namespace rachediabdenacer\test;
 
 use Carbon\Carbon;
-use timgws\QBParseException;
+use rachediabdenacer\QBParseException;
 
 /**
  * Class QBPFunctionsTests
  *
  * Uses reflection to get to one particularly
  *
- * @package timgws\test
+ * @package rachediabdenacer\test
  */
 class QBPFunctionsTests extends CommonQueryBuilderTests
 {
     protected static function getMethod($name) {
-        $class = new \ReflectionClass('\timgws\QueryBuilderParser');
+        $class = new \ReflectionClass('\rachediabdenacer\QueryBuilderParser');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
@@ -22,7 +22,7 @@ class QBPFunctionsTests extends CommonQueryBuilderTests
 
     public function testOperatorNotValid()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("makeQueryWhenArray could not return a value");
 
         $method = self::getMethod('makeQueryWhenArray');
@@ -38,7 +38,7 @@ class QBPFunctionsTests extends CommonQueryBuilderTests
 
     public function testOperatorNotValidForNull()
     {
-        $this->expectException('\timgws\QBParseException');
+        $this->expectException('\rachediabdenacer\QBParseException');
         $this->expectExceptionMessage("makeQueryWhenNull was called on an SQL operator that is not null");
 
         $method = self::getMethod('makeQueryWhenNull');

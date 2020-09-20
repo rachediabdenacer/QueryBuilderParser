@@ -1,11 +1,11 @@
 <?php
-namespace timgws\test\mongodb;
+namespace rachediabdenacer\test\mongodb;
 
 use Illuminate\Database\Capsule\Manager;
 use Jenssegers\Mongodb\Query\Builder;
 use Jenssegers\Mongodb\Query\Processor as MongoDBProcessor;
-use timgws\test\Mocks\Connection as MongoDBConnection;
-use timgws\test\CommonQueryBuilderTests;
+use rachediabdenacer\test\Mocks\Connection as MongoDBConnection;
+use rachediabdenacer\test\CommonQueryBuilderTests;
 use MongoDB\Database;
 
 class MongoDBTest extends CommonQueryBuilderTests

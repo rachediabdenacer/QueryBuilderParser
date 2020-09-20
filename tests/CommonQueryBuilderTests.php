@@ -1,13 +1,13 @@
 <?php
 
-namespace timgws\test;
+namespace rachediabdenacer\test;
 
 use \PHPUnit\Framework\TestCase;
 use Illuminate\Database\Connection as Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar as MySQLGrammar;
 use Illuminate\Database\Query\Processors\MySqlProcessor as MySQLProcessor;
-use timgws\QueryBuilderParser;
+use rachediabdenacer\QueryBuilderParser;
 
 class CommonQueryBuilderTests extends TestCase
 {

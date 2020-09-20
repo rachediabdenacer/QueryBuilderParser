@@ -1,11 +1,11 @@
 <?php
 
-namespace timgws;
+namespace rachediabdenacer;
 
 use \Carbon\Carbon;
 use \stdClass;
 use \Illuminate\Database\Eloquent\Builder;
-use \timgws\QBParseException;
+use \rachediabdenacer\QBParseException;
 
 class QueryBuilderParser
 {
@@ -265,7 +265,7 @@ class QueryBuilderParser
      * @param stdClass $rule
      *
      * @throws QBRuleException
-     * @throws \timgws\QBParseException
+     * @throws \rachediabdenacer\QBParseException
      *
      * @return mixed
      */
