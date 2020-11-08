@@ -11,7 +11,7 @@ A simple to use query builder for the [jQuery QueryBuilder plugin](http://queryb
 
 ```php
     use App\Models\Product;
-    use rachediabdenacer\QueryBuilderParser;
+    use RachediAbdenacer\QueryBuilderParser\QueryBuilderParser;
     use Illuminate\Http\Resources\Json\JsonResource;
 
     $filterRules = $request->get('rules');
