@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-4": {
-          "RachediAbdenacer\\QueryBuilderParser": "src"
+          "RachediAbdenacer\\QueryBuilderParser\\": "src"
         }
 
     },
