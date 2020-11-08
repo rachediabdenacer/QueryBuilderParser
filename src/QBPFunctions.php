@@ -1,61 +1,63 @@
 <?php
-namespace rachediabdenacer;
 
-use \Illuminate\Database\Eloquent\Builder;
-use \stdClass;
-use \Carbon\Carbon;
+namespace RachediAbdenacer\QueryBuilderParser;
+
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use stdClass;
+use Carbon\Carbon;
 
 trait QBPFunctions
 {
     /**
-     * @param stdClass $rule
+     * @param  stdClass  $rule
      */
     abstract protected function checkRuleCorrect(stdClass $rule);
 
-    protected $operators = array (
-        'equal'            => array ('accept_values' => true,  'apply_to' => ['string', 'number', 'datetime']),
-        'not_equal'        => array ('accept_values' => true,  'apply_to' => ['string', 'number', 'datetime']),
-        'in'               => array ('accept_values' => true,  'apply_to' => ['string', 'number', 'datetime']),
-        'not_in'           => array ('accept_values' => true,  'apply_to' => ['string', 'number', 'datetime']),
-        'less'             => array ('accept_values' => true,  'apply_to' => ['number', 'datetime']),
-        'less_or_equal'    => array ('accept_values' => true,  'apply_to' => ['number', 'datetime']),
-        'greater'          => array ('accept_values' => true,  'apply_to' => ['number', 'datetime']),
-        'greater_or_equal' => array ('accept_values' => true,  'apply_to' => ['number', 'datetime']),
-        'between'          => array ('accept_values' => true,  'apply_to' => ['number', 'datetime']),
-        'not_between'      => array ('accept_values' => true,  'apply_to' => ['number', 'datetime']),
-        'begins_with'      => array ('accept_values' => true,  'apply_to' => ['string']),
-        'not_begins_with'  => array ('accept_values' => true,  'apply_to' => ['string']),
-        'contains'         => array ('accept_values' => true,  'apply_to' => ['string']),
-        'not_contains'     => array ('accept_values' => true,  'apply_to' => ['string']),
-        'ends_with'        => array ('accept_values' => true,  'apply_to' => ['string']),
-        'not_ends_with'    => array ('accept_values' => true,  'apply_to' => ['string']),
-        'is_empty'         => array ('accept_values' => false, 'apply_to' => ['string']),
-        'is_not_empty'     => array ('accept_values' => false, 'apply_to' => ['string']),
-        'is_null'          => array ('accept_values' => false, 'apply_to' => ['string', 'number', 'datetime']),
-        'is_not_null'      => array ('accept_values' => false, 'apply_to' => ['string', 'number', 'datetime'])
+    protected $operators = array(
+        'equal' => array('accept_values' => true, 'apply_to' => ['string', 'number', 'datetime']),
+        'not_equal' => array('accept_values' => true, 'apply_to' => ['string', 'number', 'datetime']),
+        'in' => array('accept_values' => true, 'apply_to' => ['string', 'number', 'datetime']),
+        'not_in' => array('accept_values' => true, 'apply_to' => ['string', 'number', 'datetime']),
+        'less' => array('accept_values' => true, 'apply_to' => ['number', 'datetime']),
+        'less_or_equal' => array('accept_values' => true, 'apply_to' => ['number', 'datetime']),
+        'greater' => array('accept_values' => true, 'apply_to' => ['number', 'datetime']),
+        'greater_or_equal' => array('accept_values' => true, 'apply_to' => ['number', 'datetime']),
+        'between' => array('accept_values' => true, 'apply_to' => ['number', 'datetime']),
+        'not_between' => array('accept_values' => true, 'apply_to' => ['number', 'datetime']),
+        'begins_with' => array('accept_values' => true, 'apply_to' => ['string']),
+        'not_begins_with' => array('accept_values' => true, 'apply_to' => ['string']),
+        'contains' => array('accept_values' => true, 'apply_to' => ['string']),
+        'not_contains' => array('accept_values' => true, 'apply_to' => ['string']),
+        'ends_with' => array('accept_values' => true, 'apply_to' => ['string']),
+        'not_ends_with' => array('accept_values' => true, 'apply_to' => ['string']),
+        'is_empty' => array('accept_values' => false, 'apply_to' => ['string']),
+        'is_not_empty' => array('accept_values' => false, 'apply_to' => ['string']),
+        'is_null' => array('accept_values' => false, 'apply_to' => ['string', 'number', 'datetime']),
+        'is_not_null' => array('accept_values' => false, 'apply_to' => ['string', 'number', 'datetime'])
     );
 
-    protected $operator_sql = array (
-        'equal'            => array ('operator' => '='),
-        'not_equal'        => array ('operator' => '!='),
-        'in'               => array ('operator' => 'IN'),
-        'not_in'           => array ('operator' => 'NOT IN'),
-        'less'             => array ('operator' => '<'),
-        'less_or_equal'    => array ('operator' => '<='),
-        'greater'          => array ('operator' => '>'),
-        'greater_or_equal' => array ('operator' => '>='),
-        'between'          => array ('operator' => 'BETWEEN'),
-        'not_between'      => array ('operator' => 'NOT BETWEEN'),
-        'begins_with'      => array ('operator' => 'LIKE',     'prepend'  => '%'),
-        'not_begins_with'  => array ('operator' => 'NOT LIKE', 'prepend'  => '%'),
-        'contains'         => array ('operator' => 'LIKE',     'append'  => '%', 'prepend' => '%'),
-        'not_contains'     => array ('operator' => 'NOT LIKE', 'append'  => '%', 'prepend' => '%'),
-        'ends_with'        => array ('operator' => 'LIKE',     'append' => '%'),
-        'not_ends_with'    => array ('operator' => 'NOT LIKE', 'append' => '%'),
-        'is_empty'         => array ('operator' => '='),
-        'is_not_empty'     => array ('operator' => '!='),
-        'is_null'          => array ('operator' => 'NULL'),
-        'is_not_null'      => array ('operator' => 'NOT NULL')
+    protected $operator_sql = array(
+        'equal' => array('operator' => '='),
+        'not_equal' => array('operator' => '!='),
+        'in' => array('operator' => 'IN'),
+        'not_in' => array('operator' => 'NOT IN'),
+        'less' => array('operator' => '<'),
+        'less_or_equal' => array('operator' => '<='),
+        'greater' => array('operator' => '>'),
+        'greater_or_equal' => array('operator' => '>='),
+        'between' => array('operator' => 'BETWEEN'),
+        'not_between' => array('operator' => 'NOT BETWEEN'),
+        'begins_with' => array('operator' => 'LIKE', 'prepend' => '%'),
+        'not_begins_with' => array('operator' => 'NOT LIKE', 'prepend' => '%'),
+        'contains' => array('operator' => 'LIKE', 'append' => '%', 'prepend' => '%'),
+        'not_contains' => array('operator' => 'NOT LIKE', 'append' => '%', 'prepend' => '%'),
+        'ends_with' => array('operator' => 'LIKE', 'append' => '%'),
+        'not_ends_with' => array('operator' => 'NOT LIKE', 'append' => '%'),
+        'is_empty' => array('operator' => '='),
+        'is_not_empty' => array('operator' => '!='),
+        'is_null' => array('operator' => 'NULL'),
+        'is_not_null' => array('operator' => 'NOT NULL')
     );
 
     protected $needs_array = array(
@@ -83,13 +85,14 @@ trait QBPFunctions
      */
     protected function operatorIsNull($operator)
     {
-        return ($operator == 'NULL' || $operator == 'NOT NULL') ? true : false;
+        return $operator == 'NULL' || $operator == 'NOT NULL';
     }
 
     /**
      * Make sure that a condition is either 'or' or 'and'.
      *
      * @param $condition
+     *
      * @return string
      * @throws QBParseException
      */
@@ -107,9 +110,10 @@ trait QBPFunctions
     /**
      * Enforce whether the value for a given field is the correct type
      *
-     * @param bool $requireArray value must be an array
-     * @param mixed $value the value we are checking against
-     * @param string $field the field that we are enforcing
+     * @param  bool  $requireArray  value must be an array
+     * @param  mixed  $value  the value we are checking against
+     * @param  string  $field  the field that we are enforcing
+     *
      * @return mixed value after enforcement
      * @throws QBParseException if value is not a correct type
      */
@@ -127,11 +131,12 @@ trait QBPFunctions
     /**
      * Ensure that a given field is an array if required.
      *
-     * @see enforceArrayOrString
-     * @param boolean $requireArray
+     * @param  boolean  $requireArray
      * @param $value
-     * @param string $field
+     * @param  string  $field
+     *
      * @throws QBParseException
+     * @see enforceArrayOrString
      */
     protected function checkFieldIsAnArray($requireArray, $value, $field)
     {
@@ -145,11 +150,12 @@ trait QBPFunctions
      *
      * In some instances, and array may be given when we want a string.
      *
-     * @see enforceArrayOrString
-     * @param string $field
+     * @param  string  $field
      * @param $value
+     *
      * @return mixed
      * @throws QBParseException
+     * @see enforceArrayOrString
      */
     protected function convertArrayToFlatValue($field, $value)
     {
@@ -164,8 +170,9 @@ trait QBPFunctions
      * Convert a Datetime field to Carbon items to be used for comparisons.
      *
      * @param $value
-     * @return \Carbon\Carbon
-     * @throws QBParseException
+     *
+     * @return Carbon|Carbon[]
+     * @throws Exception
      */
     protected function convertDatetimeToCarbon($value)
     {
@@ -181,9 +188,10 @@ trait QBPFunctions
     /**
      * Append or prepend a string to the query if required.
      *
-     * @param bool $requireArray value must be an array
-     * @param mixed $value the value we are checking against
-     * @param mixed $sqlOperator
+     * @param  bool  $requireArray  value must be an array
+     * @param  mixed  $value  the value we are checking against
+     * @param  mixed  $sqlOperator
+     *
      * @return mixed $value
      */
     protected function appendOperatorIfRequired($requireArray, $value, $sqlOperator)
@@ -204,9 +212,10 @@ trait QBPFunctions
     /**
      * Decode the given JSON
      *
-     * @param string incoming json
-     * @throws QBParseException
+     * @param  string incoming json
+     *
      * @return stdClass
+     * @throws QBParseException
      */
     private function decodeJSON($json)
     {
@@ -228,7 +237,8 @@ trait QBPFunctions
      *
      * throws an exception if the rule is not correct.
      *
-     * @param stdClass $rule
+     * @param  stdClass  $rule
+     *
      * @throws QBRuleException
      */
     private function getRuleValue(stdClass $rule)
@@ -245,6 +255,7 @@ trait QBPFunctions
      *
      * @param $fields
      * @param $field
+     *
      * @throws QBParseException
      */
     private function ensureFieldIsAllowed($fields, $field)
@@ -260,15 +271,15 @@ trait QBPFunctions
      * Some types of SQL Operators (ie, those that deal with lists/arrays) have specific requirements.
      * This function enforces those requirements.
      *
-     * @param Builder  $query
-     * @param stdClass $rule
-     * @param array    $sqlOperator
-     * @param array    $value
-     * @param string   $condition
-     *
-     * @throws QBParseException
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  array  $sqlOperator
+     * @param  array  $value
+     * @param  string  $condition
      *
      * @return Builder
+     * @throws QBParseException
+     *
      */
     protected function makeQueryWhenArray(Builder $query, stdClass $rule, array $sqlOperator, array $value, $condition)
     {
@@ -284,13 +295,13 @@ trait QBPFunctions
     /**
      * Create a 'null' query when required.
      *
-     * @param Builder  $query
-     * @param stdClass $rule
-     * @param array    $sqlOperator
-     * @param string   $condition
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  array  $sqlOperator
+     * @param  string  $condition
      *
-     * @throws QBParseException when SQL operator is !null
      * @return Builder
+     * @throws QBParseException when SQL operator is !null
      */
     protected function makeQueryWhenNull(Builder $query, stdClass $rule, array $sqlOperator, $condition)
     {
@@ -306,13 +317,14 @@ trait QBPFunctions
     /**
      * makeArrayQueryIn, when the query is an IN or NOT IN...
      *
-     * @see makeQueryWhenArray
-     * @param Builder $query
-     * @param stdClass $rule
-     * @param string $operator
-     * @param array $value
-     * @param string $condition
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  string  $operator
+     * @param  array  $value
+     * @param  string  $condition
+     *
      * @return Builder
+     * @see makeQueryWhenArray
      */
     private function makeArrayQueryIn(Builder $query, stdClass $rule, $operator, array $value, $condition)
     {
@@ -327,14 +339,15 @@ trait QBPFunctions
     /**
      * makeArrayQueryBetween, when the query is a BETWEEN or NOT BETWEEN...
      *
-     * @see makeQueryWhenArray
-     * @param Builder $query
-     * @param stdClass $rule
-     * @param string operator the SQL operator used. [BETWEEN|NOT BETWEEN]
-     * @param array $value
-     * @param string $condition
-     * @throws QBParseException when more then two items given for the between
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  string operator the SQL operator used. [BETWEEN|NOT BETWEEN]
+     * @param  array  $value
+     * @param  string  $condition
+     *
      * @return Builder
+     * @throws QBParseException when more then two items given for the between
+     * @see makeQueryWhenArray
      */
     private function makeArrayQueryBetween(Builder $query, stdClass $rule, $operator, array $value, $condition)
     {
@@ -342,8 +355,8 @@ trait QBPFunctions
             throw new QBParseException("{$rule->field} should be an array with only two items.");
         }
 
-        if ( $operator == 'NOT BETWEEN' ) {
-            return $query->whereNotBetween( $rule->field, $value, $condition );
+        if ($operator == 'NOT BETWEEN') {
+            return $query->whereNotBetween($rule->field, $value, $condition);
         }
 
         return $query->whereBetween($rule->field, $value, $condition);

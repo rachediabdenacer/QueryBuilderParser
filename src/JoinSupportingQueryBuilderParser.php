@@ -1,10 +1,9 @@
 <?php
 
-namespace rachediabdenacer;
+namespace RachediAbdenacer\QueryBuilderParser;
 
 use Illuminate\Database\Eloquent\Builder;
 use stdClass;
-use rachediabdenacer\QBParseException;
 
 class JoinSupportingQueryBuilderParser extends QueryBuilderParser
 {
@@ -14,8 +13,8 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
     protected $joinFields;
 
     /**
-     * @param array $fields     a list of all the fields that are allowed to be filtered by the QueryBuilder
-     * @param array $joinFields an associative array of the join fields keyed by fields name, with the following keys
+     * @param  array  $fields  a list of all the fields that are allowed to be filtered by the QueryBuilder
+     * @param  array  $joinFields  an associative array of the join fields keyed by fields name, with the following keys
      *                          - from_table       The name of the master table
      *                          - from_col         The column of the master table to use in the join
      *                          - to_table         The name of the join table
@@ -42,13 +41,12 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
      * Make sure that all the correct fields are in the rule object then add the expression to
      * the query that was given by the user to the QueryBuilder.
      *
-     * @param Builder  $query
-     * @param stdClass $rule
-     * @param string   $queryCondition the condition that will be used in the query
-     *
-     * @throws QBParseException
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  string  $queryCondition  the condition that will be used in the query
      *
      * @return Builder
+     * @throws QBParseException
      */
     protected function makeQuery(Builder $query, stdClass $rule, $queryCondition = 'AND')
     {
@@ -73,9 +71,12 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
     /**
      * Build a subquery clause if there are join fields that have been specified.
      *
-     * @param Builder $query
-     * @param stdClass $rule
-     * @param string|null $value
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  string|null  $value
+     *
+     * @param $condition
+     *
      * @return Builder the query builder object
      */
     private function buildSubclauseQuery($query, $rule, $value, $condition)
@@ -98,9 +99,9 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
         // Create a where exists clause to join to the other table, and find results matching the criteria
         $query = $query->whereExists(
         /**
-         * @param Builder $query
+         * @param  Builder  $query
          */
-            function($query) use ($subclause) {
+            function ($query) use ($subclause) {
 
                 $q = $query->selectRaw(1)
                     ->from($subclause['to_table'])
@@ -124,19 +125,22 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
     /**
      * The inner query for a subclause
      *
-     * @see buildSubclauseQuery
-     * @param array $subclause
-     * @param Builder $query
+     * @param  array  $subclause
+     * @param  Builder  $query
+     *
      * @return Builder the query builder object
+     * @throws QBParseException
+     * @see buildSubclauseQuery
      */
-    private function buildSubclauseInnerQuery($subclause,    $query)
+    private function buildSubclauseInnerQuery($subclause, $query)
     {
         if ($subclause['require_array']) {
             return $this->buildRequireArrayQuery($subclause, $query);
         }
 
         if ($subclause['operator'] == 'NULL' || $subclause['operator'] == 'NOT NULL') {
-            return $this->buildSubclauseWithNull($subclause, $query, ($subclause['operator'] == 'NOT NULL' ? true : false));
+            return $this->buildSubclauseWithNull($subclause, $query,
+                $subclause['operator'] == 'NOT NULL');
         }
 
         return $this->buildRequireNotArrayQuery($subclause, $query);
@@ -145,11 +149,12 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
     /**
      * The inner query for a subclause when an array is required
      *
-     * @see buildSubclauseInnerQuery
-     * @throws QBParseException when an invalid array is passed.
-     * @param array $subclause
-     * @param Builder $query
+     * @param  array  $subclause
+     * @param  Builder  $query
+     *
      * @return Builder the query builder object
+     * @throws QBParseException when an invalid array is passed.
+     * @see buildSubclauseInnerQuery
      */
     private function buildRequireArrayQuery($subclause, $query)
     {
@@ -179,10 +184,11 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
     /**
      * The inner query for a subclause when an array is not requeired
      *
-     * @see buildSubclauseInnerQuery
-     * @param array $subclause
-     * @param Builder $query
+     * @param  array  $subclause
+     * @param  Builder  $query
+     *
      * @return Builder the query builder object
+     * @see buildSubclauseInnerQuery
      */
     private function buildRequireNotArrayQuery($subclause, $query)
     {
@@ -192,12 +198,15 @@ class JoinSupportingQueryBuilderParser extends QueryBuilderParser
     /**
      * The inner query for a subclause when the operator is NULL.
      *
-     * @see buildSubclauseInnerQuery
-     * @param array $subclause
-     * @param Builder $query
+     * @param  array  $subclause
+     * @param  Builder  $query
+     *
+     * @param  bool  $isNotNull
+     *
      * @return Builder the query builder object
+     * @see buildSubclauseInnerQuery
      */
-    private function buildSubclauseWithNull($subclause,  $query, $isNotNull = false)
+    private function buildSubclauseWithNull($subclause, $query, $isNotNull = false)
     {
         if ($isNotNull === true) {
             return $query->whereNotNull($subclause['to_value_column']);

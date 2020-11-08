@@ -1,11 +1,10 @@
 <?php
 
-namespace rachediabdenacer;
+namespace RachediAbdenacer\QueryBuilderParser;
 
-use \Carbon\Carbon;
-use \stdClass;
-use \Illuminate\Database\Eloquent\Builder;
-use \rachediabdenacer\QBParseException;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use stdClass;
 
 class QueryBuilderParser
 {
@@ -14,7 +13,7 @@ class QueryBuilderParser
     protected $fields;
 
     /**
-     * @param array $fields a list of all the fields that are allowed to be filtered by the QueryBuilder
+     * @param  array  $fields  a list of all the fields that are allowed to be filtered by the QueryBuilder
      */
     public function __construct(array $fields = null)
     {
@@ -27,11 +26,11 @@ class QueryBuilderParser
      * Build a query based on JSON that has been passed into the function, onto the builder passed into the function.
      *
      * @param $json
-     * @param Builder $querybuilder
-     *
-     * @throws QBParseException
+     * @param  Builder  $querybuilder
      *
      * @return Builder
+     * @throws QBParseException
+     *
      */
     public function parse($json, Builder $querybuilder)
     {
@@ -54,13 +53,13 @@ class QueryBuilderParser
     /**
      * Called by parse, loops through all the rules to find out if nested or not.
      *
-     * @param array $rules
-     * @param Builder $querybuilder
-     * @param string $queryCondition
-     *
-     * @throws QBParseException
+     * @param  array  $rules
+     * @param  Builder  $querybuilder
+     * @param  string  $queryCondition
      *
      * @return Builder
+     * @throws QBParseException
+     *
      */
     protected function loopThroughRules(array $rules, Builder $querybuilder, $queryCondition = 'AND')
     {
@@ -99,10 +98,12 @@ class QueryBuilderParser
      *
      * When a rule is actually a group of rules, we want to build a nested query with the specified condition (AND/OR)
      *
-     * @param Builder $querybuilder
-     * @param stdClass $rule
-     * @param string|null $condition
+     * @param  Builder  $querybuilder
+     * @param  stdClass  $rule
+     * @param  string|null  $condition
+     *
      * @return Builder
+     * @throws QBParseException
      */
     protected function createNestedQuery(Builder $querybuilder, stdClass $rule, $condition = null)
     {
@@ -134,7 +135,7 @@ class QueryBuilderParser
      *
      * Just before making a query for a rule, we want to make sure that the field, operator and value are set
      *
-     * @param stdClass $rule
+     * @param  stdClass  $rule
      *
      * @return bool true if values are correct.
      */
@@ -173,12 +174,13 @@ class QueryBuilderParser
      * Append/Prepend values for SQL statements, etc.
      *
      * @param $operator
-     * @param stdClass $rule
+     * @param  stdClass  $rule
      * @param $value
      *
-     * @throws QBParseException
-     *
      * @return string
+     * @throws QBParseException
+     * @throws Exception
+     *
      */
     protected function getCorrectValue($operator, stdClass $rule, $value)
     {
@@ -206,13 +208,13 @@ class QueryBuilderParser
      * Make sure that all the correct fields are in the rule object then add the expression to
      * the query that was given by the user to the QueryBuilder.
      *
-     * @param Builder $query
-     * @param stdClass $rule
-     * @param string $queryCondition and/or...
-     *
-     * @throws QBParseException
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  string  $queryCondition  and/or...
      *
      * @return Builder
+     * @throws QBParseException
+     *
      */
     protected function makeQuery(Builder $query, stdClass $rule, $queryCondition = 'AND')
     {
@@ -234,11 +236,13 @@ class QueryBuilderParser
      * (This used to be part of makeQuery, where the name made sense, but I pulled it
      * out to reduce some duplicated code inside JoinSupportingQueryBuilder)
      *
-     * @param Builder $query
-     * @param stdClass $rule
-     * @param mixed $value the value that needs to be queried in the database.
-     * @param string $queryCondition and/or...
+     * @param  Builder  $query
+     * @param  stdClass  $rule
+     * @param  mixed  $value  the value that needs to be queried in the database.
+     * @param  string  $queryCondition  and/or...
+     *
      * @return Builder
+     * @throws QBParseException
      */
     protected function convertIncomingQBtoQuery(Builder $query, stdClass $rule, $value, $queryCondition = 'AND')
     {
@@ -262,12 +266,12 @@ class QueryBuilderParser
     /**
      * Ensure that the value is correct for the rule, try and set it if it's not.
      *
-     * @param stdClass $rule
-     *
-     * @throws QBRuleException
-     * @throws \rachediabdenacer\QBParseException
+     * @param  stdClass  $rule
      *
      * @return mixed
+     * @throws QBParseException
+     *
+     * @throws QBRuleException
      */
     protected function getValueForQueryFromRule(stdClass $rule)
     {

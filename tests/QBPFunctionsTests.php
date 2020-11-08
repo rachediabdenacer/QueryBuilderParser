@@ -1,20 +1,19 @@
 <?php
-namespace rachediabdenacer\test;
+namespace RachediAbdenacer\QueryBuilderParser\Tests;
 
 use Carbon\Carbon;
-use rachediabdenacer\QBParseException;
 
 /**
  * Class QBPFunctionsTests
  *
  * Uses reflection to get to one particularly
  *
- * @package rachediabdenacer\test
+ * @package RachediAbdenacer\QueryBuilderParser\Tests
  */
 class QBPFunctionsTests extends CommonQueryBuilderTests
 {
     protected static function getMethod($name) {
-        $class = new \ReflectionClass('\rachediabdenacer\QueryBuilderParser');
+        $class = new \ReflectionClass('\RachediAbdenacer\QueryBuilderParser\QueryBuilderParser');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
@@ -22,7 +21,7 @@ class QBPFunctionsTests extends CommonQueryBuilderTests
 
     public function testOperatorNotValid()
     {
-        $this->expectException('\rachediabdenacer\QBParseException');
+        $this->expectException('\RachediAbdenacer\QueryBuilderParser\QBParseException');
         $this->expectExceptionMessage("makeQueryWhenArray could not return a value");
 
         $method = self::getMethod('makeQueryWhenArray');
@@ -38,7 +37,7 @@ class QBPFunctionsTests extends CommonQueryBuilderTests
 
     public function testOperatorNotValidForNull()
     {
-        $this->expectException('\rachediabdenacer\QBParseException');
+        $this->expectException('\RachediAbdenacer\QueryBuilderParser\QBParseException');
         $this->expectExceptionMessage("makeQueryWhenNull was called on an SQL operator that is not null");
 
         $method = self::getMethod('makeQueryWhenNull');

@@ -13,14 +13,19 @@
     ],
     "autoload": {
         "psr-4": {
-          "rachediabdenacer\\": "src/QueryBuilderParser/",
-          "rachediabdenacer\\test\\": "tests/"
+          "RachediAbdenacer\\QueryBuilderParser": "src"
         }
 
     },
+    "autoload-dev": {
+        "psr-4": {
+            "RachediAbdenacer\\QueryBuilderParser\\Tests\\": "tests"
+        }
+    },
     "minimum-stability": "dev",
     "require": {
-        "illuminate/database": "^8.0||^7.0||^6.0||4.1 - 6.0"
+        "illuminate/database": "^8.0||^7.0||^6.0||4.1 - 6.0",
+        "ext-json": "*"
     },
     "suggest": {
         "jenssegers/mongodb": "Use QueryBuilderParser with MongoDB"

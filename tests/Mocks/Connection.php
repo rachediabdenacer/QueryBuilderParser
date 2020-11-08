@@ -1,5 +1,5 @@
 <?php
-namespace rachediabdenacer\test\Mocks;
+namespace RachediAbdenacer\QueryBuilderParser\Tests\Mocks;
 
 
 /**
@@ -7,7 +7,7 @@ namespace rachediabdenacer\test\Mocks;
  *
  * Connection, with mocked collection.
  *
- * @package rachediabdenacer\test\Mocks
+ * @package RachediAbdenacer\QueryBuilderParser\Tests\Mocks
  */
 class Connection extends \Jenssegers\Mongodb\Connection implements \Jenssegers\Mongodb\Contracts\ConnectionContract
 {
